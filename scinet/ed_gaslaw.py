@@ -12,6 +12,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+from CoolProp.CoolProp import PropsSI
 import numpy as np
 import cPickle
 import gzip
@@ -28,10 +29,13 @@ species1: in CoolProp notation. Heavier species.
 species2: in CoolProp notation. Lighter species.
 fileName: self-explanatory.
 """
-def generate_data(N, n_o, pr_interval=[1.0,2.0], Tr_interval=[3.0,4.0], species1="Ar", species2="He", fileName=None):
+def generate_data(N, n_o, p_interval=[1.0,2.0], T_interval=[1.0,2.0], M1=0.03995, M2=0.004, fileName=None):
     
     def getRho(pr, Tr, Z):
-        return pr/Tr
+        Ru = 8.314 # Universal gas constant
+        p = pr*1.0e5
+        T = Tr*300.0
+        return (p/(Ru * T)) * 1.0/((Z/M1) + ((1.0-Z)/M2))
 
     # Number of variables
     l_o = 3 # p, T, rho
